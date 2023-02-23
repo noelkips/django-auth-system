@@ -1,0 +1,13 @@
+<html>
+    <head>
+        <title>django auth</title>
+    </head>
+    <body>
+        <header>
+            <a href="{% url 'index'%}">Home</a>
+            <a href="{% url 'signup'%}">signup</a>
+        </header>
+        {% block content%}
+        {% endblock content%}
+    </body>
+</html>
