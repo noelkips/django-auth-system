@@ -1,5 +1,6 @@
 [![Python Version](https://img.shields.io/badge/python-3.10-brightgreen.svg)](https://python.org)
 [![Django Version](https://img.shields.io/badge/django-4.1.7-brightgreen.svg)](https://djangoproject.com)
+[![Pillow Version](https://img.shields.io/badge/pillow-9.4.0-brightgreen.svg)](https://pillow.readthedocs.io/en/stable/about.html)
 
 # django-auth-system
 
