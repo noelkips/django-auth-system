@@ -54,6 +54,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'django_auth.urls'
+AUTH_USER_MODEL = 'authentication.UserAccount'
+
 
 TEMPLATES = [
     {
