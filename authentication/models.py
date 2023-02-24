@@ -33,8 +33,8 @@ class UserAccountManager(BaseUserManager):
 	
 class UserAccount(AbstractBaseUser):
 	class Types(models.TextChoices):
-		STUDENT = "STUDENT" , "student"
-		TEACHER = "TEACHER" , "teacher"
+		USER = "USER" , "user"
+		STAFF = "STAFF" , "staff"
 		ADMIN = "ADMIN" , "admin"
 		
 	type = models.CharField(max_length = 20, choices = Types.choices ,
@@ -49,10 +49,9 @@ class UserAccount(AbstractBaseUser):
 	mobile = models.CharField(max_length=13, unique=True, verbose_name='Phone Number')
 	
 	#custom 
-    #student
-    #teacher
-	student = models.BooleanField(default = False)
-	teacher = models.BooleanField(default = False)
+    
+	user = models.BooleanField(default = False)
+	staff = models.BooleanField(default = False)
 	
 	
 	USERNAME_FIELD = "mobile"
@@ -77,8 +76,8 @@ class UserAccount(AbstractBaseUser):
 		return super().save(*args , **kwargs)
 
 
-#CUSTOM Student MODELS
-class StudentManager(models.Manager):
+#CUSTOM normal user MODELS
+class UserManager(models.Manager):
 	def create_user(self , email , first_name, last_name, mobile,  password = None):
 		if not email or len(email) <= 0 :
 			raise ValueError("Email field is required !")
@@ -98,20 +97,20 @@ class StudentManager(models.Manager):
 	
 	def get_queryset(self , *args, **kwargs):
 		queryset = super().get_queryset(*args , **kwargs)
-		queryset = queryset.filter(type = UserAccount.Types.STUDENT)
+		queryset = queryset.filter(type = UserAccount.Types.ADMIN)
 		return queryset	
 		
-class Student(UserAccount):
+class User(UserAccount):
 	class Meta :
 		proxy = True
-	objects = StudentManager()
+	objects = UserManager()
 	
 	def save(self , *args , **kwargs):
-		self.type = UserAccount.Types.STUDENT
-		self.student = True
+		self.type = UserAccount.Types.USER
+		self.user = True
 		return super().save(*args , **kwargs)
 	
-class TeacherManager(models.Manager):
+class StaffManager(models.Manager):
 	def create_user(self , email , first_name, last_name, mobile,  password = None):
 		if not email or len(email) <= 0 :
 			raise ValueError("Email field is required !")
@@ -124,22 +123,22 @@ class TeacherManager(models.Manager):
 			last_name = last_name,
 			mobile = mobile,
 		)
-		user.teacher = True
+		user.staff = True
 		user.set_password(password)
 		user.save(using = self._db)
 		return user
 		
 	def get_queryset(self , *args , **kwargs):
 		queryset = super().get_queryset(*args , **kwargs)
-		queryset = queryset.filter(type = UserAccount.Types.TEACHER)
+		queryset = queryset.filter(type = UserAccount.Types.STAFF)
 		return queryset
 	
-class Teacher(UserAccount):
+class Staff(UserAccount):
 	class Meta :
 		proxy = True
-	objects = TeacherManager()
+	objects = StaffManager()
 	
 	def save(self , *args , **kwargs):
-		self.type = UserAccount.Types.TEACHER
-		self.teacher = True
+		self.type = UserAccount.Types.STAFF
+		self.staff = True
 		return super().save(*args , **kwargs)
